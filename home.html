@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>
+        Live Vinheteiro bilibili's Subscriber Counter
+    </title>
+    <meta charset="UTF-8">
+    <meta name="Vinheteiro" content="Live subscriber counter for Vinheteiro's bilibili channel">
+    <link rel="stylesheet" href="odometer-theme-default.min.css">
+    <style>
+        .count.odometer{
+            font-size: 90px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header" style="background-color:#FFFFFF;"> </div>
+    <div id="Vinheteiro">
+        <h2>Vinheteiro</h2>
+        <p>
+            <strong>粉丝数/Subscriber Count: </strong>
+            <div class="count">0</div>
+        </p>
+    </div>
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    var subcount = new Odometer({
+        el: document.querySelector('#Vinheteiro .count'),
+        format: ',ddd',
+        theme: 'default'
+    })
+setInterval(()=>{
+getSub();
+},2000)
+
+function getSub()
+{
+    var bilibiliAPI_URL = 'stat.json';
+    $.getJSON(bilibiliAPI_URL,function(result)
+    {
+       console.log(result);
+       subcount.update(result['data']['follower']);
+    })    
+}
+</script>
