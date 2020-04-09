@@ -16,9 +16,11 @@
   <meta content="telephone=no" name="format-detection" /> <!--忽略数字识别为电话-->
   <meta content="email=no" name="format-detection" /> <!--忽略识别邮箱-->
 
+  <!--引用odometer样式-->
   <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/themes/odometer-theme-default.css" />
-  <style>
+
+  <style> 
     @font-face {
       font-family: 'number';
       src: url('NotoSans-Bold.ttf');
@@ -32,6 +34,7 @@
       font-family: 'number';
       font-size: 16vw;
       color: #000000;
+      overflow: hidden;
     }
 
     #main {
@@ -120,9 +123,9 @@
     }
     // 显示头像和粉丝数
     const showFansCount = function (json) {
-      elFans.innerHTML = Number(json.data.follower).toLocaleString()
-      elAvatar.src = json.data.card.face.replace(/^http:/, 'https:')
-      elName.innerHTML = json.data.card.name
+      elFans.innerHTML = Number(json.data.follower).toLocaleString() //格式化数字//
+      elAvatar.src = json.data.card.face.replace(/^http:/, 'https:') //替换https//
+      elName.innerHTML = json.data.card.name //更新up主昵称
     }
 
     var elScriptChild
