@@ -2,9 +2,9 @@
 <html>
 
 <head>
-  <title>Vinheteiro Bilibili Subscriber Counter</title>
+  <title>Bilibili Fans Counter</title>
   <meta charset="UTF-8"> <!--定义字符串-->
-  <meta name="referrer" content="no-referrer" /> <!--发送的referre信息-->
+  <meta name="referrer" content="no-referrer" /> <!--发送的referrer信息-->
   <meta name="author" content="Jason"/> <!--作者名字-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> <!--决定layout viewport-->
   <meta http-equiv="X-UA-Compatible" content="ie=edge"> <!--最新版IE-->
@@ -27,67 +27,96 @@
 
     html,
     body {
-      padding: 0;
-      margin: 0;
-      background-color: #ffffff;
+      height:95vh;
+      margin:1vh 0;
       font-family: 'number';
-      font-size: 16vw;
       color: #000000;
-      overflow: hidden;
+      font-size: 1em;
+    }   
+    #block1 {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-between;
+      }
+    
+    #logobar {
+      margin: 1% auto 3%;
+      width: 100%;
     }
-
-    #main {
-      display: flex;
-      height: 100vh;
-      max-width: 200vh;
-      margin: 0 auto;
-      justify-content: center;
-      align-items: center;
-      align-content: center;
-      flex-wrap: wrap;
-    }
-
-    #main>* {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: nowrap;
-    }
-
     #logo {
-      width: 70vw;
-      flex-wrap: wrap;
-      display: none;
+      width: 20vmin;
+      margin: 0 auto;
     }
 
-    #logo>img {
-      height: 20vmin;
+    #logo img {
+      height: 100%;
+      width: 100%;
     }
 
-    #logo>#sep {
-      padding: 0 2vmin;
+    #up_infor {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
     }
-
-    #logo>#avatar {
-      border-radius: 30%;
-      border-style:solid;
-      border-width:1px;
+    #avatar {
+      border-radius: 50%;
+      border:2px solid black;
+      max-height: 100%;
     }
-
-    #fans {
-      line-height: 80%;
-      color: #000000;
-      margin-top: 0vmin;
-      display: none;
-    }
-
     #name {
       color: #000000;
-      margin-top: 1vmin;
       font-size: 15vmin;
     }
+    #fans {
+      color: #000000;
+      flex-wrap: nowrap;
+      font-size: 20vmin;
+    }
 
-    #script,#flagc {
+      #block2 {
+        display: flex; justify-content: center; align-items: center;
+      }
+
+    @media screen and (orientation: landscape){
+      #block1 {
+        height:40%;
+      }
+
+      #block2 {
+        height:60%;
+      }
+
+      #up_infor {
+
+        height: 20vh;
+        flex-flow: row nowrap;
+      }
+
+      #avatar{
+        height: 100%;
+      }
+
+    }
+
+    @media screen and (orientation: portrait){
+      #block1 {
+        height:50%;
+      }
+
+      #block2 {
+        height:50%;
+      }
+      #up_infor {
+        flex-flow: column nowrap;
+      }
+
+        #avatar{
+        width:25%;
+      }
+
+    }
+
+    #script {
       display: none;
     }
 
@@ -95,18 +124,22 @@
 </head>
 
 <body>
-  <div id="main">
-    <div id="logo">
-      <img src="bilibilil.png" alt="">
-      <div id="sep"></div>
-      <img id="avatar" alt="">
-    </div>
-    <div id="name"></div>
-    <div id="fans" class="odometer"></div>
-    <div id="flagc" class="odometer"></div>
+  <div id="block1">
+    <div id="logobar">
+      <div id="logo">
+       <a href="https://bilibili.com"><img src="bilibilil.png" alt="bilibili"></a>
+      </div>
+      <hr>
+   </div>
+   <div id="up_infor">
+      <img id="avatar" alt="up_name">
+      <div id="name"></div>
+   </div>
+  </div>
+  <div id="block2">
+   <div id="fans" class="odometer"></div>
   </div>
   <div id="script"></div>
-
 <script>
 
     // 初始化元素常量
@@ -130,18 +163,19 @@
     var flag=0
     const showFansCount = function (json) {
       elFans.innerHTML = Number(json.data.follower).toLocaleString() //格式化数字//
+
       if(flag<1)
       {
         elAvatar.src = json.data.card.face.replace(/^http:/, 'https:')//替换https//
         elName.innerHTML = json.data.card.name; //更新up主昵称
-        document.getElementById('logo').style.display="flex";
-        elFans.style.display="flex";
+        /*document.getElementById('logo').style.display="flex";
+        elFans.style.display="flex";*/
         changeIcon();
       }
       flag++;
     }
-  //改变图标
 
+  //改变iOS图标
   var icon
   const changeIcon = function () {
     icon = document.createElement('link');
@@ -169,7 +203,7 @@
       appendScript(father)
     }
 
-    // 页面元素定位
+    /*// 页面元素定位
     const resize = function () {
       elFans.style.fontSize = document.getElementById('main').clientWidth * 0.22 + 'px'
       if (window.innerHeight > window.innerWidth) {
@@ -179,7 +213,7 @@
       }
     }
     resize()
-    window.onresize = resize
+    window.onresize = resize*/
 
     //test
     window.addEventListener('message', function (e) {
@@ -189,7 +223,7 @@
     }, false);
 
     //创建页面隐藏框架实现定时刷新
-    const duration = 2; /* /s */
+    const duration = 60; /* /s */
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';
     iframe.src = 'data:text/html,%3C%21DOCTYPE%20html%3E%0A%3Chtml%3E%0A%3Chead%3E%0A%09%3Cmeta%20charset%3D%22utf-8%22%20%2F%3E%0A%09%3Cmeta%20http-equiv%3D%22refresh%22%20content%3D%22' + duration + '%22%20id%3D%22metarefresh%22%20%2F%3E%0A%09%3Ctitle%3Ex%3C%2Ftitle%3E%0A%3C%2Fhead%3E%0A%3Cbody%3E%0A%09%3Cscript%3Etop.postMessage%28%27refresh%27%2C%20%27%2A%27%29%3B%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E';
