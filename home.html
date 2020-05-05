@@ -1,51 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>
-        Live Vinheteiro bilibili's Subscriber Counter
-    </title>
-    <meta charset="UTF-8">
-    <meta name="Vinheteiro" content="Live subscriber counter for Vinheteiro's bilibili channel">
-    <link rel="stylesheet" href="odometer-theme-default.min.css">
-    <style>
-        .count.odometer{
-            font-size: 90px;
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Design Test 2</title>
+    <link rel="stylesheet" href="/css/mdui.min.css">
+    <script src="/js/mdui.min.js"></script>
+    <style>
+        .Title {
+            font-weight: 500;
+            font-size: 25px;
         }
     </style>
 </head>
 
-<body>
-    <div id="header" style="background-color:#FFFFFF;"> </div>
-    <div id="Vinheteiro">
-        <h2>Vinheteiro</h2>
-        <p>
-            <strong>粉丝数/Subscriber Count: </strong>
-            <div class="count">0</div>
-        </p>
+<body class="mdui-theme-primary-blue mdui-theme-accent-light-blue">
+    <div class="mdui-container-fluid">
+        <div class="mdui-drawer mdui-drawer-close mdui-drawer-full-height mdui-color-white" id="drawer">
+            <div class="mdui-list">
+                <div class="mdui-list-item">
+                    <div class="mdui-list-item-content mdui-text-center">
+                        <p><strong class="mdui-typo-display-2 mdui-valign"> 菜单</strong></p>
+                    </div>
+                </div>
+                <div class="mdui-list-item mdui-ripple">
+                    <i class="mdui-list-item-icon mdui-icon material-icons">&#xe869;</i>
+                    <div class="mdui-list-item-content">跟随系统主题</div>
+                    <label class="mdui-switch">
+                        <input type="checkbox" id="followOS" checked>
+                        <i class="mdui-switch-icon"></i>
+                    </label>
+                </div>
+                <div class="mdui-list-item mdui-ripple" id="nightMode">
+                    <i class="mdui-list-item-icon mdui-icon material-icons">&#xe3a9;</i>
+                    <div class="mdui-list-item-content">夜间模式</div>
+                    <label class="mdui-switch">
+                        <input type="checkbox" id="nightModeCB">
+                        <i class="mdui-switch-icon"></i>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="mdui-appbar mdui-appbar-fixed">
+            <div class="mdui-toolbar mdui-color-theme">
+                <a class="mdui-btn mdui-btn-icon mdui-ripple" id="toolbarButton">
+                    <i class="mdui-icon material-icons mdui-text-color-white">menu</i>
+                </a> 
+                <span class="Title mdui-text-color-white">杰森的小站</span>
+            </div>
+        </div>
+
     </div>
 
 </body>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
-    var subcount = new Odometer({
-        el: document.querySelector('#Vinheteiro .count'),
-        format: ',ddd',
-        theme: 'default'
-    })
-setInterval(()=>{
-getSub();
-},2000)
+    var init = new mdui.Drawer('#drawer', {
+        overlay: true, swipe: true
+    });
+    document.getElementById('toolbarButton').addEventListener('click', function () { init.toggle(); });
 
-function getSub()
-{
-    var bilibiliAPI_URL = 'stat.json';
-    $.getJSON(bilibiliAPI_URL,function(result)
-    {
-       console.log(result);
-       subcount.update(result['data']['follower']);
-    })    
-}
+    var followOSCB = document.getElementById('followOS');
+    var nightModeB = document.getElementById('nightMode');
+    var nightModeCB = document.getElementById('nightModeCB');
+    var savedTheme = localStorage.getItem('savedTheme') ? localStorage.getItem('savedTheme') : null;
+    var mediaQueryDark = window.matchMedia("(prefers-color-scheme:dark)");
+    var drawerP = document.getElementById('drawer');
+
+    const switchTheme = function (final) {
+        if (final === "dark") {
+            document.body.classList.toggle('mdui-theme-layout-dark',true);
+            drawerP.classList.replace('mdui-color-white','mdui-color-grey-900');
+            nightModeCB.checked = true;
+        }
+        else {
+            document.body.classList.toggle('mdui-theme-layout-dark',false);
+            drawerP.classList.replace('mdui-color-grey-900','mdui-color-white');
+            nightModeCB.checked = false;
+        }
+    }
+
+    function toggleListener() {
+        if (nightModeCB.checked) {
+            switchTheme("dark");
+            localStorage.setItem("savedTheme", "dark");
+        }
+        else {
+            switchTheme();
+            localStorage.setItem("savedTheme", "light");
+        }
+    }
+
+    function onChangeOS() {
+        if (followOSCB.checked) {
+            if (mediaQueryDark.matches) switchTheme("dark");
+            else switchTheme();
+        }
+    }
+
+    function followOSListener() {
+        if (followOSCB.checked) {
+            nightModeB.classList.add('mdui-hidden');
+            localStorage.removeItem("savedTheme");
+            if (mediaQueryDark.matches) switchTheme("dark");
+            else switchTheme();
+        }
+        else {
+            nightModeB.classList.remove('mdui-hidden');
+            toggleListener();
+        }
+    }
+
+    function initialize() {
+        var final;
+        if (!window.matchMedia) {
+            followOSCB = false;
+            followOSCB.disabled = true;
+            return;
+        }
+        else {
+            if (mediaQueryDark.matches) final = "dark";
+            else final = "light";
+        }
+        if (savedTheme) {
+            followOSCB.checked = false;
+            final = savedTheme;
+        }
+        switchTheme(final);
+    }
+
+    initialize();
+    followOSCB.addEventListener("change", followOSListener);
+    nightModeCB.addEventListener("change", toggleListener);
+    onChangeOS();
+    mediaQueryDark.addListener(onChangeOS);
+
 </script>

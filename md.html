@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="/stylesheet/material.min.css" />
+    <style>
+        [data-theme="light"] {
+            --primary-color: #1E88E5;
+            --secondary-color: #2196F3;
+            --background-color: #FFFFFF;
+            --title-font-color: #FFFFFF;
+            --font-color: #757575;
+            --border:1px solid #e0e0e0;
+            --hover-color: #e0e0e0;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #212121 ;
+            --secondary-color: #303030;
+            --background-color: black;
+            --title-font-color: #FFFFFF;
+            --font-color: #FFFFFF;
+            --border: 1px solid #00000;;
+            --hover-color: #424242;
+            --checkbox-color:#616161;
+        }
+
+        .mdl-layout__title, .mdl-layout-title, .mdl-layout__title, .mdl-layout-title{
+            color: var(--title-font-color);
+        }
+        .mdl-layout__header {
+            background-color: var(--primary-color);
+        }
+
+        .mdl-layout, .mdl-layout .mdl-layout__drawer {
+            background-color: var(--background-color);
+        }
+
+        .mdl-layout__drawer{
+            border-right: var(--border);
+        }
+
+        .mdl-layout-title {
+            background-color: var(--secondary-color);
+        }
+
+        .mdl-layout__drawer .mdl-navigation .mdl-navigation__link{
+            color: var(--font-color);
+        }
+
+        .mdl-layout__drawer .mdl-navigation .mdl-navigation__link:hover{
+            background-color: var(--hover-color);
+        }
+
+        .mdl-checkbox.is-checked .mdl-checkbox__tick-outline {
+            background-color: var(--checkbox-color);
+        }
+
+    </style>
+    <script src="/js/material.min.js"></script>
+</head>
+
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <span class="mdl-layout__title">杰森的小站</span>
+                </nav>
+            </div>
+        </header>
+
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">菜单</span>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="">关于我</a>
+                <div class="mdl-navigation__link">
+                    <label for="followOS" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+                        <input type="checkbox" id="followOS" class="mdl-checkbox__input" checked>
+                        <span class="mdl-checkbox__label">跟随系统主题</span>
+                    </label>
+                </div>
+                <div class="mdl-navigation__link" id="nm">
+                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="nMSwitch">
+                        <input type="checkbox" id="nMSwitch" class="mdl-switch__input">
+                        <span class="mdl-switch__label">夜间模式</span>
+                    </label>
+                </div>
+            </nav>
+        </div>
+
+        <main class="mdl-layout__content">
+            <div class="page-content">
+                <div class="mdl-card mdl-card--border mdl-shadow--2dp">
+                    <div class="mdl-card__title">
+                        <h1 class="mdl-card__title-text">Bilibli Counter</h1>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                        一个可以实时刷新的哔哩哔哩频道粉丝计数器。
+                    </div>
+                    <div class="mdl-card__actions mdl-card--border">
+                        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="">
+                            打开
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="mdl-mini-footer">
+            <div class="mdl-mini-footer__left-section">
+                <div class="mdl-logo">Title</div>
+                <ul class="mdl-mini-footer__link-list">
+                    <li><a href="#">Help</a></li>
+                    <li><a href="#">Privacy & Terms</a></li>
+                </ul>
+            </div>
+        </footer>
+
+    </div>
+</body>
+<script>
+    var followOSCheckbox = document.getElementById("followOS")
+    const nModeBox = document.getElementById("nm")
+    const nMToggle = document.getElementById("nMSwitch")
+    const currentTheme = localStorage.getItem('currentTheme') ? localStorage.getItem('currentTheme') : null;
+    const mediaQueryDark = window.matchMedia("(prefers-color-scheme:dark)")
+
+    function switchTheme(flag) {
+        if (flag === "light") {
+            document.documentElement.setAttribute("data-theme", "light");
+            nMToggle.checked = false;
+        }
+        else if (flag === "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
+            nMToggle.checked = true;
+        }
+    }
+
+    function initial() {
+        var final;
+        if (!window.matchMedia) {
+            followOSCheckbox.checked = false;
+            followOSCheckbox.disabled = true;
+            nModeBox.style.display = "inline";
+        }
+        else {
+            followOSCheckbox.checked = true;
+            nModeBox.style.display = "none";
+            if (mediaQueryDark) final = "dark";
+            else final = "light";
+        }
+        if (currentTheme) {
+            followOSCheckbox.checked = false;
+            nModeBox.style.display = "inline";
+            final = currentTheme;
+        }
+        switchTheme(final);
+    }
+
+    function toggleListener() {
+        if (nMToggle.checked) {
+            switchTheme("dark");
+            localStorage.setItem("currentTheme", "dark");
+        }
+        else {
+            switchTheme("light");
+            localStorage.setItem("currentTheme", "light");
+        }
+    }
+
+    function followOSListener() {
+        if (followOSCheckbox.checked) {
+            nModeBox.style.display = "none";
+            localStorage.removeItem("currentTheme");
+            if (mediaQueryDark) switchTheme("dark");
+            else switchTheme("light");
+        }
+        else if (!followOSCheckbox.checked) {
+            nModeBox.style.display = "inline";
+            toggleListener();
+        }
+    }
+
+    initial();
+    followOSCheckbox.addEventListener("change", followOSListener);
+    nMToggle.addEventListener("change", toggleListener);
+</script>
+
+</html>
