@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Material Design Test 2</title>
+    <title>杰森的小站</title>
     <link rel="stylesheet" href="/css/mdui.min.css">
     <style>
         .Title {
@@ -12,23 +12,35 @@
             font-size: 25px;
         }
 
-        #version {
+        #bottomBtns {
+            width:100%;
             position: absolute;
-            bottom: 0;
+            bottom: 2%;
+            display: inline-flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
         }
 
-        .container {
-            padding-top: 0px;
+        #version,#aboutme {
+            max-width: 100%;
+            height: 50px;
+            font-size:18px;
+
         }
     </style>
 </head>
 
 <body class="mdui-appbar-with-toolbar mdui-theme-accent-light-blue">
+    <div class="mdui-progress" id="loadingBar">
+        <div class="mdui-progress-indeterminate"></div>
+      </div>
     <div class="mdui-drawer mdui-drawer-close mdui-drawer-full-height mdui-color-white" id="drawer">
         <div class="mdui-list">
             <div class="mdui-list-item">
                 <div class="mdui-list-item-content mdui-text-center">
-                    <p><strong class="mdui-typo-display-2 mdui-valign"> 菜单</strong></p>
+                    <p><strong class="mdui-typo-display-2 mdui-valign">菜单</strong></p>
                 </div>
             </div>
             <div class="mdui-divider"></div>
@@ -36,27 +48,34 @@
                 <i class="mdui-list-item-icon mdui-icon material-icons">&#xe869;</i>
                 <div class="mdui-list-item-content">跟随系统主题</div>
                 <label class="mdui-switch">
-                    <input type="checkbox" id="followOS" checked>
+                    <input type="checkbox" id="followOSToggle" checked>
                     <i class="mdui-switch-icon"></i>
                 </label>
             </div>
-            <div class="mdui-list-item mdui-ripple" id="nightMode">
+            <div class="mdui-list-item mdui-ripple" id="nightModeDiv">
                 <i class="mdui-list-item-icon mdui-icon material-icons">&#xe3a9;</i>
                 <div class="mdui-list-item-content">夜间模式</div>
                 <label class="mdui-switch">
-                    <input type="checkbox" id="nightModeCB">
+                    <input type="checkbox" id="nightModeToggle">
                     <i class="mdui-switch-icon"></i>
                 </label>
             </div>
-            <div class="mdui-divider" id="container"></div>
-            <a href="https://github.com/Jas0n2k/jas0n2k.github.io">
-                <div class="mdui-list-item mdui-text-center" id="version">
-                    <div class="mdui-list-item-content">版本：1.01</div>
-                </div>
-            </a>
+            <div class="mdui-divider"></div>
+        </div>
+        <div id="bottomBtns">
+            <button class="mdui-btn mdui-ripple" id="version">版本：1.02</button>
+            <button class="mdui-btn mdui-ripple" id="aboutme">关于</button>
+        </div>
+
+    </div>
+    <div class="mdui-dialog" id="updates">
+        <div class="mdui-dialog-title">更新日志</div>
+        <div class="mdui-dialog-content" id="updateContent">
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" mdui-dialog-close>OK</button>
         </div>
     </div>
-
     <div class="mdui-appbar mdui-appbar-fixed">
         <div class="mdui-toolbar mdui-color-theme">
             <a class="mdui-btn mdui-btn-icon mdui-ripple" id="toolbarButton">
@@ -68,7 +87,6 @@
         </div>
     </div>
 
-
     <div class="mdui-container-fluid mdui-p-x-4">
         <div class="mdui-typo">
             <h1 class="mdui-text-color-theme">写在前面...</h1>
@@ -79,24 +97,10 @@
             <h1 class="mdui-text-color-theme">我的应用</h1>
         </div>
         <div class="mdui-row">
-            <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-col-lg-4 mdui-col-offset-lg-2">
+            <div class="mdui-col-xs-12 mdui-col-sm-12 mdui-col-md-6 mdui-col-offset-md-3 mdui-col-lg-4 mdui-col-offset-lg-4">
                 <div class="mdui-card mdui-hoverable">
                     <div class="mdui-card-media">
                         <img src="/materials/bilibili Counter.png" />
-                        <div class="mdui-card-media-covered mdui-text-center mdui-card-media-covered-gradient">
-                            <div class="mdui-card-primary-title" style="color:#23ade5">Bilibili粉丝计数器</div>
-                            <div class="mdui-card-primary-subtitle">一款实时刷新的粉丝计数器</div>
-                        </div>
-                    </div>
-                    <div class="mdui-card-actions mdui-text-center">
-                        <a class="mdui-btn mdui-ripple mdui-text-color-theme-text mdui-btn-block"
-                            href="https://jas0n2k.github.io/BilibiliSubsCounter/">前往</a>
-                    </div>
-                </div>
-            </div>
-            <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-col-lg-4">
-                <div class="mdui-card mdui-hoverable">
-                    <div class="mdui-card-media"><img src="/materials/bilibili Counter.png" />
                         <div class="mdui-card-media-covered mdui-text-center mdui-card-media-covered-gradient">
                             <div class="mdui-card-primary-title" style="color:#23ade5">Bilibili粉丝计数器</div>
                             <div class="mdui-card-primary-subtitle">一款实时刷新的粉丝计数器</div>
@@ -116,7 +120,7 @@
 </body>
 <script src="/js/mdui.min.js"></script>
 <script src="/js/nightmode.js"></script>
-<script src="/js/drawer.js"></script>
+<script src="/js/custom.js"></script>
 <script>
 
 </script>
